@@ -1,0 +1,13 @@
+/*
+ * stm32f407_gpio_driver.h
+ *
+ *  Created on: May 20, 2023
+ *      Author: rafae
+ */
+
+#ifndef INC_STM32F407_GPIO_DRIVER_H_
+#define INC_STM32F407_GPIO_DRIVER_H_
+
+#include "stm32f407xx.h"
+
+#endif /* INC_STM32F407_GPIO_DRIVER_H_ */

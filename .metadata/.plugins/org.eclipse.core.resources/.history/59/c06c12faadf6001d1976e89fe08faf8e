@@ -1,0 +1,33 @@
+/*
+ * stm32f407_gpio_driver.h
+ *
+ *  Created on: May 20, 2023
+ *      Author: rafae
+ */
+
+#ifndef INC_STM32F407_GPIO_DRIVER_H_
+#define INC_STM32F407_GPIO_DRIVER_H_
+
+#include "stm32f407xx.h"
+
+
+/*
+ * This is a handle structure for GPIO pin
+ */
+
+typedef struct{
+
+	GPIO_RegDef_t *pGPIOBaseAddr;		/* This holds the base addres of the GPIO port to with the pin belongs */
+
+}GPIO_Handle_t;
+
+
+
+
+
+
+
+
+
+
+#endif /* INC_STM32F407_GPIO_DRIVER_H_ */

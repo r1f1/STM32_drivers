@@ -1,0 +1,10 @@
+21:10:48 **** Incremental Build of configuration Debug for project 004HSI_Measurements ****
+make -j4 all 
+arm-none-eabi-size   004HSI_Measurements.elf 
+   text	   data	    bss	    dec	    hex	filename
+    780	      8	   1568	   2356	    934	004HSI_Measurements.elf
+Finished building: default.size.stdout
+ 
+
+21:10:48 Build Finished. 0 errors, 0 warnings. (took 290ms)
+

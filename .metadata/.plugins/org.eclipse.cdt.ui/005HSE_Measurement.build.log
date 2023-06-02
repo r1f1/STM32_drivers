@@ -1,0 +1,17 @@
+12:05:53 **** Incremental Build of configuration Debug for project 005HSE_Measurement ****
+make -j4 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32 -DSTM32F407G_DISC1 -DSTM32F4 -DSTM32F407VGTx -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/main.o"
+arm-none-eabi-gcc -o "005HSE_Measurement.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\rafae\Documents\Embedded-C\MCU1-Course\MCU1\005HSE_Measurement\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="005HSE_Measurement.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: 005HSE_Measurement.elf
+ 
+arm-none-eabi-size   005HSE_Measurement.elf 
+arm-none-eabi-objdump -h -S  005HSE_Measurement.elf  > "005HSE_Measurement.list"
+   text	   data	    bss	    dec	    hex	filename
+    840	      8	   1568	   2416	    970	005HSE_Measurement.elf
+Finished building: default.size.stdout
+ 
+Finished building: 005HSE_Measurement.list
+ 
+
+12:05:54 Build Finished. 0 errors, 0 warnings. (took 1s.449ms)
+
