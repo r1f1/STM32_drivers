@@ -268,7 +268,7 @@ int main(){
 			delay();
 
 			// Send user data
-			SPI_SendData(SPI2, (uint8_t *)message, message10);
+			SPI_SendData(SPI2, (uint8_t *)message, 1);
 			SPI_ReceiveData(SPI2,&dummy_read,1);
 		}
 
