@@ -257,7 +257,7 @@ int main(){
 
 		// Function to verify if the ack byte is valid or not
 		if( SPI_VerifyRespons(ackbyte) ){
-			char message[] = "Spain";
+			char message[] = "Viva Espania";
 			uint8_t message_len = strlen(message);
 
 			// Send length of user data
