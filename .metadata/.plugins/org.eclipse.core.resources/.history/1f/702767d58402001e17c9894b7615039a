@@ -370,24 +370,3 @@ uint8_t SPI_ReceiveDataIT(SPI_Handle_t *pSPIHandle, uint8_t *pRxBuffer, uint32_t
 	return state;
 }
 
-/*************************************************************************************
- * @fn				- SPI_IRQHandling
- *
- * @brief			-
- *
- * @param[in]		-
- * @param[in]		-
- *
- * @return 			- none
- *
- * @Note			-
- *
- */
-
-void SPI_IRQHandling(SPI_Handle_t *pSPIHandle){
-
-}
-
-
-
-

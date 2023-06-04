@@ -1,4 +1,4 @@
-04:17:59 **** Incremental Build of configuration Debug for project stm32f407_drivers ****
+01:50:18 **** Incremental Build of configuration Debug for project stm32f407_drivers ****
 make -j4 all 
 arm-none-eabi-gcc "../Src/008spi_cmd_handling.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32 -DSTM32F407G_DISC1 -DSTM32F4 -DSTM32F407VGTx -c -I../Inc -I"C:/Users/rafae/Documents/Embedded-C/MCU1-Course/MCU1/stm32f407_drivers/drivers/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Src/008spi_cmd_handling.d" -MT"Src/008spi_cmd_handling.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/008spi_cmd_handling.o"
 arm-none-eabi-gcc -o "stm32f407_drivers.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\rafae\Documents\Embedded-C\MCU1-Course\MCU1\stm32f407_drivers\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="stm32f407_drivers.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
@@ -7,11 +7,11 @@ Finished building target: stm32f407_drivers.elf
 arm-none-eabi-size   stm32f407_drivers.elf 
 arm-none-eabi-objdump -h -S  stm32f407_drivers.elf  > "stm32f407_drivers.list"
    text	   data	    bss	    dec	    hex	filename
-   3712	      8	   1568	   5288	   14a8	stm32f407_drivers.elf
+   3948	      8	   1568	   5524	   1594	stm32f407_drivers.elf
 Finished building: default.size.stdout
  
 Finished building: stm32f407_drivers.list
  
 
-04:18:01 Build Finished. 0 errors, 0 warnings. (took 2s.82ms)
+01:50:18 Build Finished. 0 errors, 0 warnings. (took 729ms)
 

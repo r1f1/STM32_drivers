@@ -158,7 +158,7 @@ int main(){
 		SPI_SendData(SPI2, &dummy_write, 1);
 
 		// Read ack byte received
-		SPI_ReceiveData(SPI2, &ackbyte, 1);
+		SPI_SendData(SPI2, &ackbyte, 1);
 
 		// Function to verify if the ack byte is valid or not
 		if( SPI_VerifyRespons(ackbyte) ){
@@ -181,9 +181,10 @@ int main(){
 		SPI_SendData(SPI2, &cmdCode, 1);
 		SPI_ReceiveData(SPI2,&dummy_read,1);
 
-		// Read ack byte received
 		SPI_SendData(SPI2, &dummy_write, 1);
-		SPI_ReceiveData(SPI2, &ackbyte, 1);
+
+		// Read ack byte received
+		SPI_SendData(SPI2, &ackbyte, 1);
 
 		// Function to verify if the ack byte is valid or not
 		if( SPI_VerifyRespons(ackbyte) ){
@@ -218,7 +219,7 @@ int main(){
 
 		// Read ack byte received
 		SPI_SendData(SPI2, &dummy_write, 1);
-		SPI_ReceiveData(SPI2, &ackbyte, 1);
+		SPI_SendData(SPI2, &ackbyte, 1);
 
 		// Function to verify if the ack byte is valid or not
 		if( SPI_VerifyRespons(ackbyte) ){
@@ -252,7 +253,7 @@ int main(){
 
 		// Read ack byte received
 		SPI_SendData(SPI2, &dummy_write, 1);
-		SPI_ReceiveData(SPI2, &ackbyte, 1);
+		SPI_SendData(SPI2, &ackbyte, 1);
 
 		// Function to verify if the ack byte is valid or not
 		if( SPI_VerifyRespons(ackbyte) ){
@@ -267,13 +268,8 @@ int main(){
 			delay();
 
 			// Send user data
-			// We send this byte by byte because at the same time we send a byte the buffer
-			// (SPI_DR) has to be empty so that's why we "read" the returned dummy byte, to clear
-			// the register
-			for(int i = 0 ; i < message_len ; i++){
-				SPI_SendData(SPI2,(uint8_t *)&message[i],1);
-				SPI_ReceiveData(SPI2,&dummy_read,1);
-			}
+			SPI_SendData(SPI2, (uint8_t *)message, message10);
+			SPI_ReceiveData(SPI2,&dummy_read,1);
 		}
 
 
@@ -292,10 +288,7 @@ int main(){
 
 		// Read ack byte received
 		SPI_SendData(SPI2, &dummy_write, 1);
-		SPI_ReceiveData(SPI2, &ackbyte, 1);
-
-		uint8_t id[11];
-		uint32_t i=0;
+		SPI_SendData(SPI2, &ackbyte, 1);
 
 		// Function to verify if the ack byte is valid or not
 		if( SPI_VerifyRespons(ackbyte) ){
@@ -306,13 +299,6 @@ int main(){
 
 		}
 
-		//read 10 bytes id from the slave
-		for(  i = 0 ; i < 10 ; i++)
-		{
-			//send dummy byte to fetch data from slave
-			SPI_SendData(SPI2,&dummy_write,1);
-			SPI_ReceiveData(SPI2,&id[i],1);
-		}
 
 		/* Confirm that SPI is not busy and all the data is transferred */
 		while( SPI_GetFlagStatus(SPI2, SPI_BSY_FLAG) );
