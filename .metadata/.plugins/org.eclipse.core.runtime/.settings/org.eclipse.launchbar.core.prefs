@@ -12,4 +12,6 @@ org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:stm32f4xx_drivers/activeLaunchT
 org.eclipse.launchbar.core.descriptorType.default\:003PeriClockEnable\ Debug/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
 org.eclipse.launchbar.core.descriptorType.default\:stm32f407_drivers\ Debug/activeLaunchMode=debug
 org.eclipse.launchbar.core.descriptorType.default\:stm32f407_drivers\ Debug/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
+org.eclipse.launchbar.core.descriptorType.default\:stm32f4xx_drivers\ Debug/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:stm32f4xx_drivers\ Debug/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
 org.eclipse.launchbar.core.descriptorType.default\:stm32f4xx_drivers.elf/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local

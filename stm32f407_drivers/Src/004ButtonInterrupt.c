@@ -49,8 +49,6 @@ int main(){
 	GpioLed.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_LOW;
 	GpioLed.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_NO_PUPD;
 
-	GPIO_PeriClockControl(GPIOD, ENABLE);
-
 	GPIO_Init(&GpioLed);
 
 	/* Button pin configuration */
@@ -61,7 +59,6 @@ int main(){
 	GPIOBtn.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_HIGH;
 	GPIOBtn.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_PU;
 
-	GPIO_PeriClockControl(GPIOD, ENABLE);
 
 	GPIO_Init(&GPIOBtn);
 

@@ -11,6 +11,7 @@
 #include <stdint.h>
 
 #define __vo volatile
+#define __weak	__attribute__((weak))  // The weak attribute causes the declaration to be emitted as a weak symbol rather than a global
 
 /********************************** START: Processor Specific Details *******************************/
 

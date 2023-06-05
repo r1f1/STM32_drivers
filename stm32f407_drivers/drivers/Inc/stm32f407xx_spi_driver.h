@@ -8,6 +8,7 @@
 #ifndef INC_STM32F407XX_SPI_DRIVER_H_
 #define INC_STM32F407XX_SPI_DRIVER_H_
 
+#include <stddef.h>
 #include "stm32f407xx.h"
 
 /*
@@ -146,6 +147,15 @@ typedef struct{
 #define SPI_BUSY_IN_RX					1
 #define SPI_BUSY_IN_TX					2
 
+/*
+ * Possible SPI applications events
+ */
+
+#define SPI_EVENT_TX_CMPLT				1
+#define SPI_EVENT_RX_CMPLT				2
+#define SPI_EVENT_OVR_ERR				3
+#define SPI_EVENT_CRC_ERR				4
+
 /************************************************************************************************
  * 									APIs supported by this driver
  * 				For more information about the APIs check the function definition
@@ -193,6 +203,20 @@ uint8_t SPI_GetFlagStatus(SPI_RegDef_t *pSPIx, uint32_t FlagName);
 void SPI_IRQInterruptConfig(uint8_t IRQNumber, uint8_t EnorDi);
 void SPI_IRQPriorityConfig(uint8_t IRQNumber, uint32_t IRQPriority);
 void SPI_IRQHandling(SPI_Handle_t *pSPIHandle);
+
+/*
+ * Other peripheral control APIs
+ */
+
+void SPI_ClearOVRFlag(SPI_Handle_t *pSPIHandle);
+void SPI_CloseTransmission(SPI_Handle_t *pSPIHandle);
+void SPI_CloseReception(SPI_Handle_t *pSPIHandle);
+
+/*
+ * Application Callback
+ */
+
+__weak void SPI_ApplicationEventCallback(SPI_Handle_t *pSPIHandle, uint8_t AppEv);
 
 
 #endif /* INC_STM32F407XX_SPI_DRIVER_H_ */
