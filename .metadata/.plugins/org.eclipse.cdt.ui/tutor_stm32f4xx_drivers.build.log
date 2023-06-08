@@ -1,30 +1,10 @@
-11:21:04 **** Build of configuration Debug for project tutor_stm32f4xx_drivers ****
+12:38:03 **** Incremental Build of configuration Debug for project tutor_stm32f4xx_drivers ****
 make all 
-arm-none-eabi-gcc -mcpu=cortex-m4 -g3 -c -x assembler-with-cpp -MMD -MP -MF"startup/startup_stm32.d" -MT"startup/startup_stm32.o"  -mfloat-abi=soft -mthumb -o "startup/startup_stm32.o" "../startup/startup_stm32.s"
-arm-none-eabi-gcc "../src/tutor_006spi_tx_testing.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DSTM32 -DSTM32F4 -DSTM32F407VGTx -DSTM32F407G_DISC1 -DDEBUG -c -I"C:/Users/rafae/Documents/Embedded-C/MCU1-Course/Tutor driver/MasteringMCU/Resources/Source_code/Workspace/stm32f4xx_drivers/drivers/inc" -O0 -ffunction-sections -Wall -fstack-usage -MMD -MP -MF"src/tutor_006spi_tx_testing.d" -MT"src/tutor_006spi_tx_testing.o"  -mfloat-abi=soft -mthumb -o "src/tutor_006spi_tx_testing.o"
-arm-none-eabi-gcc "../drivers/src/stm32f407xx_gpio_driver.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DSTM32 -DSTM32F4 -DSTM32F407VGTx -DSTM32F407G_DISC1 -DDEBUG -c -I"C:/Users/rafae/Documents/Embedded-C/MCU1-Course/Tutor driver/MasteringMCU/Resources/Source_code/Workspace/stm32f4xx_drivers/drivers/inc" -O0 -ffunction-sections -Wall -fstack-usage -MMD -MP -MF"drivers/src/stm32f407xx_gpio_driver.d" -MT"drivers/src/stm32f407xx_gpio_driver.o"  -mfloat-abi=soft -mthumb -o "drivers/src/stm32f407xx_gpio_driver.o"
-arm-none-eabi-gcc "../drivers/src/stm32f407xx_i2c_driver.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DSTM32 -DSTM32F4 -DSTM32F407VGTx -DSTM32F407G_DISC1 -DDEBUG -c -I"C:/Users/rafae/Documents/Embedded-C/MCU1-Course/Tutor driver/MasteringMCU/Resources/Source_code/Workspace/stm32f4xx_drivers/drivers/inc" -O0 -ffunction-sections -Wall -fstack-usage -MMD -MP -MF"drivers/src/stm32f407xx_i2c_driver.d" -MT"drivers/src/stm32f407xx_i2c_driver.o"  -mfloat-abi=soft -mthumb -o "drivers/src/stm32f407xx_i2c_driver.o"
-arm-none-eabi-gcc "../drivers/src/stm32f407xx_rcc_driver.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DSTM32 -DSTM32F4 -DSTM32F407VGTx -DSTM32F407G_DISC1 -DDEBUG -c -I"C:/Users/rafae/Documents/Embedded-C/MCU1-Course/Tutor driver/MasteringMCU/Resources/Source_code/Workspace/stm32f4xx_drivers/drivers/inc" -O0 -ffunction-sections -Wall -fstack-usage -MMD -MP -MF"drivers/src/stm32f407xx_rcc_driver.d" -MT"drivers/src/stm32f407xx_rcc_driver.o"  -mfloat-abi=soft -mthumb -o "drivers/src/stm32f407xx_rcc_driver.o"
-arm-none-eabi-gcc "../drivers/src/stm32f407xx_spi_driver.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DSTM32 -DSTM32F4 -DSTM32F407VGTx -DSTM32F407G_DISC1 -DDEBUG -c -I"C:/Users/rafae/Documents/Embedded-C/MCU1-Course/Tutor driver/MasteringMCU/Resources/Source_code/Workspace/stm32f4xx_drivers/drivers/inc" -O0 -ffunction-sections -Wall -fstack-usage -MMD -MP -MF"drivers/src/stm32f407xx_spi_driver.d" -MT"drivers/src/stm32f407xx_spi_driver.o"  -mfloat-abi=soft -mthumb -o "drivers/src/stm32f407xx_spi_driver.o"
-arm-none-eabi-gcc "../drivers/src/stm32f407xx_usart_driver.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DSTM32 -DSTM32F4 -DSTM32F407VGTx -DSTM32F407G_DISC1 -DDEBUG -c -I"C:/Users/rafae/Documents/Embedded-C/MCU1-Course/Tutor driver/MasteringMCU/Resources/Source_code/Workspace/stm32f4xx_drivers/drivers/inc" -O0 -ffunction-sections -Wall -fstack-usage -MMD -MP -MF"drivers/src/stm32f407xx_usart_driver.d" -MT"drivers/src/stm32f407xx_usart_driver.o"  -mfloat-abi=soft -mthumb -o "drivers/src/stm32f407xx_usart_driver.o"
-../drivers/src/stm32f407xx_usart_driver.c: In function 'USART_IRQHandling':
-../drivers/src/stm32f407xx_usart_driver.c:619:26: warning: variable 'temp3' set but not used [-Wunused-but-set-variable]
-  619 |  uint32_t temp1 , temp2, temp3;
-      |                          ^~~~~
-arm-none-eabi-gcc -o "tutor_stm32f4xx_drivers.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\rafae\Documents\Embedded-C\MCU1-Course\Tutor driver\MasteringMCU\Resources\Source_code\Workspace\stm32f4xx_drivers\LinkerScript.ld" -Wl,-Map="tutor_stm32f4xx_drivers.map" -Wl,--gc-sections -static -specs=rdimon.specs -lc -lrdimon  -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: tutor_stm32f4xx_drivers.elf
- 
 arm-none-eabi-size   tutor_stm32f4xx_drivers.elf 
    text	   data	    bss	    dec	    hex	filename
-   2768	   1080	   1060	   4908	   132c	tutor_stm32f4xx_drivers.elf
+  28592	   2504	   1820	  32916	   8094	tutor_stm32f4xx_drivers.elf
 Finished building: default.size.stdout
  
-arm-none-eabi-objdump -h -S  tutor_stm32f4xx_drivers.elf  > "tutor_stm32f4xx_drivers.list"
-Finished building: tutor_stm32f4xx_drivers.list
- 
-arm-none-eabi-objcopy  -O binary  tutor_stm32f4xx_drivers.elf  "tutor_stm32f4xx_drivers.bin"
-Finished building: tutor_stm32f4xx_drivers.bin
- 
 
-11:21:06 Build Finished. 0 errors, 1 warnings. (took 1s.908ms)
+12:38:03 Build Finished. 0 errors, 0 warnings. (took 281ms)
 

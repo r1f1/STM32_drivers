@@ -307,20 +307,20 @@ void GPIO_IRQInterruptConfig(uint8_t IRQNumber, uint8_t EnorDi){
 		if (IRQNumber <= 31){
 			*NVIC_ISER0 |= ( 1 << IRQNumber);
 
-		}else if ((IRQNumber > 31) & (IRQNumber < 64)){
+		}else if ((IRQNumber > 31) && (IRQNumber < 64)){
 			*NVIC_ISER1 |= ( 1 << (IRQNumber - 32));
 
-		}else if ((IRQNumber > 64) & (IRQNumber < 96)){
+		}else if ((IRQNumber > 64) && (IRQNumber < 96)){
 			*NVIC_ISER2 |= ( 1 << (IRQNumber - 64));
 		}
 	}else {
 		if (IRQNumber <= 31){
 			*NVIC_ICER0 |= ( 1 << IRQNumber);
 
-		}else if ((IRQNumber > 31) & (IRQNumber < 64)){
+		}else if ((IRQNumber > 31) && (IRQNumber < 64)){
 			*NVIC_ICER1 |= ( 1 << (IRQNumber - 32));
 
-		}else if ((IRQNumber > 64) & (IRQNumber < 96)){
+		}else if ((IRQNumber > 64) && (IRQNumber < 96)){
 			*NVIC_ICER2 |= ( 1 << (IRQNumber - 64));
 		}
 	}
@@ -328,7 +328,7 @@ void GPIO_IRQInterruptConfig(uint8_t IRQNumber, uint8_t EnorDi){
 
 void GPIO_IRQPriorityConfig(uint8_t IRQNumber, uint32_t IRQPriority){
 
-	/* 1. Find out the IPR register	 */
+	/* 1. Find out the IPR register */
 	uint8_t iprx = IRQNumber / 4;
 	uint8_t iprx_section = IRQNumber % 4;
 
