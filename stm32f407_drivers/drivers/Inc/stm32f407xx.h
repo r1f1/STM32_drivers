@@ -157,6 +157,21 @@ typedef struct{
 	__vo uint32_t I2SPR;				/* SPI_I2S prescaler register */
 } SPI_RegDef_t;
 
+
+/*
+ * Peripheral register definition structure for I2C
+ */
+
+typedef struct{
+	__vo uint32_t CR[2];				/* I2C Control register */
+	__vo uint32_t OAR[2];				/* I2C Own address register */
+	__vo uint32_t DR;					/* I2C Data register */
+	__vo uint32_t SR[2];				/* I2C Status register */
+	__vo uint32_t CCR;					/* I2C Clock control register */
+	__vo uint32_t TRISE;				/* I2C TRISE register */
+	__vo uint32_t FLTR;					/* I2C FLTR register */
+} I2C_RegDef_t;
+
 /*
  * Peripheral register definition structure for RCC
  */
@@ -249,7 +264,9 @@ typedef struct{
 #define SPI2				((SPI_RegDef_t *) SPI2_BASEADDR)
 #define SPI3				((SPI_RegDef_t *) SPI3_BASEADDR)
 
-
+#define I2C1				((I2C_RegDef_t *) I2C1_BASEADDR)
+#define I2C2				((I2C_RegDef_t *) I2C2_BASEADDR)
+#define I2C3				((I2C_RegDef_t *) I2C3_BASEADDR)
 
 /************************** Enable Clocks *********************/
 
@@ -370,6 +387,41 @@ typedef struct{
 #define SPI2_REG_RESET()	do{ ( RCC->APB1RSTR |= (1 << 14)); ( RCC->APB1RSTR &= ~(1 << 14)); }while(0)
 #define SPI3_REG_RESET()	do{ ( RCC->APB1RSTR |= (1 << 15)); ( RCC->APB1RSTR &= ~(1 << 15)); }while(0)
 
+
+/*
+ * Macros to reset I2Cx peripherals
+ */
+
+#define I2C1_REG_RESET()	do{ ( RCC->APB1RSTR |= (1 << 21)); ( RCC->APB1RSTR &= ~(1 << 21)); }while(0)
+#define I2C2_REG_RESET()	do{ ( RCC->APB1RSTR |= (1 << 22)); ( RCC->APB1RSTR &= ~(1 << 22)); }while(0)
+#define I2C3_REG_RESET()	do{ ( RCC->APB1RSTR |= (1 << 23)); ( RCC->APB1RSTR &= ~(1 << 23)); }while(0)
+
+/*
+ * Macro function to code APB1 prescaler
+ * This function returns the number which the clock is divided by
+ */
+
+#define APB1_PRESCALER(x)			( (x == 0) ? 1:\
+									  (x == 4) ? 2:\
+									  (x == 5) ? 4:\
+									  (x == 6) ? 8:\
+									  (x == 7) ? 16:0 )
+
+/*
+ * Macro function to code AHB prescaler
+ * This function returns the number which the clock is divided by
+ */
+
+#define AHB_PRESCALER(x)			( (x == 0) ? 1:\
+									  (x == 8) ? 2:\
+									  (x == 9) ? 4:\
+									  (x == 10) ? 8:\
+									  (x == 11) ? 16:\
+									  (x == 12) ? 64:\
+									  (x == 13) ? 128:\
+									  (x == 14) ? 256:\
+									  (x == 15) ? 512:0 )
+
 /*
  * Macro function to code GPIO ports
  * This function returns a code (between 0 to 7) for a given GPIO base address(x)
@@ -464,8 +516,66 @@ typedef struct{
 #define SPI_SR_FRE			8
 
 
+/****************************** Bit position definition of I2C peripheral **************************/
+
+#define I2C_CR1_PE				0
+#define I2C_CR1_SMBUS			1
+#define I2C_CR1_SMB TYPE		3
+#define I2C_CR1_ENARP			4
+#define I2C_CR1_ENPEC			5
+#define I2C_CR1_ENGC			6
+#define I2C_CR1_NO STRETCH		7
+#define I2C_CR1_START			8
+#define I2C_CR1_STOP			9
+#define I2C_CR1_ACK				10
+#define I2C_CR1_POS				11
+#define I2C_CR1_PEC				12
+#define I2C_CR1_ALERT			13
+#define I2C_CR1_SWRST			15
+
+#define I2C_CR2_FREQ			0
+#define I2C_CR2_ITERREN 		8
+#define I2C_CR2_ITEVTEN 		9
+#define I2C_CR2_ITBUFEN 		10
+#define I2C_CR2_DMAEN 			11
+#define I2C_CR2_LAST 			12
+
+#define I2C_OAR_ADD				1
+
+#define I2C_SR1_SB				0
+#define I2C_SR1_ADDR			1
+#define I2C_SR1_BTF				2
+#define I2C_SR1_ADD10			3
+#define I2C_SR1_STOPF			4
+#define I2C_SR1_RxNE			6
+#define I2C_SR1_TxNE			7
+#define I2C_SR1_BERR			8
+#define I2C_SR1_ARLO			9
+#define I2C_SR1_AF				10
+#define I2C_SR1_OVR				11
+#define I2C_SR1_PECERR			12
+#define I2C_SR1_TIMEOUT			14
+#define I2C_SR1_SMBALERT		15
+
+#define I2C_SR2_MSL				0
+#define I2C_SR2_BUSY			1
+#define I2C_SR2_TRA				2
+#define I2C_SR2_GENCALL			4
+#define I2C_SR2_SMBDEFAULT		5
+#define I2C_SR2_SMBHOST			6
+#define I2C_SR2_DUALF			7
+#define I2C_SR2_PEC				8
+
+#define I2C_CCR					0
+#define I2C_CCR_DUTY			14
+#define I2C_CCR_FS				15
+
+
+
+
 #include "stm32f407_gpio_driver.h"
 #include "stm32f407xx_spi_driver.h"
+#include "stm32f407xx_i2c_driver.h"
 
 #endif /* INC_STM32F407XX_H_ */
 

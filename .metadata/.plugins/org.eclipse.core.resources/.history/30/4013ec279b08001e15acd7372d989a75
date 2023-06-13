@@ -1,0 +1,78 @@
+/*
+ * stm32f407xx_i2c_driver.h
+ *
+ *  Created on: Jun 11, 2023
+ *      Author: rafae
+ */
+
+#ifndef INC_STM32F407XX_I2C_DRIVER_H_
+#define INC_STM32F407XX_I2C_DRIVER_H_
+
+#include "stm32f407xx.h"
+
+/*
+ * User I2C configuration structure
+ */
+
+typedef struct{
+	uint8_t I2C_SCLSpeed;					/*  */
+	uint8_t I2C_DeviceAddress;				/*  */
+	uint8_t I2C_ACKControl;					/* */
+	uint8_t I2C_FMDutyCycle;				/*  */
+} I2C_ConfigReg_t;
+
+
+/*
+ * Handle structure for I2Cx peripheral
+ */
+
+typedef struct{
+	I2C_RegDef_t 		*pI2Cx;				/* This holds the base address of the I2C port to which the pin belongs */
+	I2C_ConfigReg_t 	I2C_Config;			/* This holds I2C peripheral configuration settings */
+}I2C_Handle_t;
+
+
+/*
+ * @I2C_SCL_SPEED
+ */
+
+#define I2C_SCL_SPEED_SM			100000		/* Standard mode speed reach up to 100Kbps */
+#define I2C_SCL_SPEED_FM			400000		/* Fast mode speed reach up to 400Kbps */
+
+/*
+ * @I2C_DEVICE_ADDRESS
+ */
+
+#define I2C_BUS_FULL_DUPLEX				0
+#define I2C_BUS_HALF_DUPLEX_TX			1
+#define I2C_BUS_HALF_DUPLEX_RX			2
+#define I2C_BUS_SIMPLEX_TXONLY			3
+#define I2C_BUS_SIMPLEX_RXONLY			4
+
+/*
+ * @I2C_ACK_CONTROL
+ */
+
+#define I2C_SCLK_SPEED_DIV2				0
+#define I2C_SCLK_SPEED_DIV4				1
+#define I2C_SCLK_SPEED_DIV8				2
+#define I2C_SCLK_SPEED_DIV16			3
+#define I2C_SCLK_SPEED_DIV32			4
+#define I2C_SCLK_SPEED_DIV64			5
+#define I2C_SCLK_SPEED_DIV128			6
+#define I2C_SCLK_SPEED_DIV256			7
+
+/*
+ * @I2C_FM_DUTY_CYCLE
+ */
+
+#define I2C_DFF_8_BITS 					0
+#define I2C_DFF_16_BITS					1
+
+
+
+
+
+
+
+#endif /* INC_STM32F407XX_I2C_DRIVER_H_ */

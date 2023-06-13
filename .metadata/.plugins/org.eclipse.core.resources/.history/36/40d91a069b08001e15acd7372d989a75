@@ -1,0 +1,34 @@
+/*
+ * stm32f407xx_i2c_driver.h
+ *
+ *  Created on: Jun 11, 2023
+ *      Author: rafae
+ */
+
+#ifndef INC_STM32F407XX_I2C_DRIVER_H_
+#define INC_STM32F407XX_I2C_DRIVER_H_
+
+#include "stm32f407xx.h"
+
+/*
+ * User I2C configuration structure
+ */
+
+typedef struct{
+	uint8_t I2C_SCLSpeed;					/*  */
+	uint8_t I2C_DeviceAddress;				/*  */
+	uint8_t I2C_ACKControl;					/* */
+	uint8_t I2C_FMDutyCycle;				/*  */
+} I2C_ConfigReg_t;
+
+
+/*
+ * Handle structure for SPIx peripheral
+ */
+
+typedef struct{
+	I2C_RegDef_t 		*pI2Cx;				/* This holds the base address of the SPI port to which the pin belongs */
+	I2C_ConfigReg_t 	I2C_Config;			/* This holds SPI peripheral configuration settings */
+}I2C_Handle_t;
+
+#endif /* INC_STM32F407XX_I2C_DRIVER_H_ */

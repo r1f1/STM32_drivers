@@ -1,0 +1,25 @@
+/*
+ * stm32f407xx_i2c_driver.h
+ *
+ *  Created on: Jun 11, 2023
+ *      Author: rafae
+ */
+
+#ifndef INC_STM32F407XX_I2C_DRIVER_H_
+#define INC_STM32F407XX_I2C_DRIVER_H_
+
+/*
+ * User SPI configuration structure
+ */
+
+typedef struct{
+	uint8_t SPI_DeviceMode;					/* Configure device as a Master or Salve */
+	uint8_t SPI_BusConfig;					/* Communication type: full-duplex, half-duplex or simplex (Default full-duplex) */
+	uint8_t SPI_SclkSpeed;					/* Serial clock speed */
+	uint8_t SPI_DFF;						/* Data Frame Format: 8bits or 16bits (Default 8bits) */
+	uint8_t SPI_CPOL;						/* Clock polarity (Default 0) */
+	uint8_t SPI_CPAH;						/* Clock phase (Default 0) */
+	uint8_t SPI_SSM;						/* Slave Select Management: Software or Hardware management */
+} I2C_ConfigReg_t;
+
+#endif /* INC_STM32F407XX_I2C_DRIVER_H_ */
