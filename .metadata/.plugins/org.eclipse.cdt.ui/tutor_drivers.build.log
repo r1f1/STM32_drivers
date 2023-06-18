@@ -1,10 +1,10 @@
-18:49:48 **** Incremental Build of configuration Debug for project tutor_drivers ****
+17:49:30 **** Incremental Build of configuration Debug for project tutor_drivers ****
 make -j4 all 
 arm-none-eabi-size   tutor_drivers.elf 
    text	   data	    bss	    dec	    hex	filename
-   8772	    108	   2124	  11004	   2afc	tutor_drivers.elf
+   8332	    128	   1656	  10116	   2784	tutor_drivers.elf
 Finished building: default.size.stdout
  
 
-18:49:49 Build Finished. 0 errors, 0 warnings. (took 325ms)
+17:49:31 Build Finished. 0 errors, 0 warnings. (took 275ms)
 

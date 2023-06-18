@@ -7,12 +7,28 @@
 
 #include "stm32f407xx_i2c_driver.h"
 
-static void I2C_ExecuteAddressPhase(I2C_RegDef_t *pI2Cx, uint8_t SlaveAddr);
+static void I2C_ExecuteAddressPhase(I2C_RegDef_t *pI2Cx, uint8_t SlaveAddr, uint8_t ReadWrite);
+static void I2C_ClearADDRFlag(I2C_RegDef_t *pI2Cx);
 
-static void I2C_ExecuteAddressPhase(I2C_RegDef_t *pI2Cx, uint8_t SlaveAddr){
+static void I2C_ExecuteAddressPhase(I2C_RegDef_t *pI2Cx, uint8_t SlaveAddr, uint8_t ReadWrite){
+
 	SlaveAddr = SlaveAddr << 1; // We shift to the right to make space for the R/nW bit
-	SlaveAddr &= ~(1);			// Make sure it is a t 0
+
+	if (ReadWrite == MASTER_WRITE){
+		SlaveAddr &= ~(1); // Set r/nw bit to 0
+	}else if (ReadWrite == MASTER_READ){
+		SlaveAddr |= (1); // // Set r/nw bit to 1
+	}
+
 	pI2Cx->DR = SlaveAddr;
+}
+
+static void I2C_ClearADDRFlag(I2C_RegDef_t *pI2Cx){
+
+	// As per RM we have to read SR register in order to clear ADDR flag
+	uint32_t dummyRead = pI2Cx->SR[0];
+	dummyRead = pI2Cx->SR[1];
+	(void)dummyRead; // This is to avoid warnings because of unused variables
 }
 
 /*
@@ -85,11 +101,15 @@ uint32_t RCC_GetPCLK1Value(void){
 
 void I2C_Init(I2C_Handle_t *pI2CHandle){
 
+	// Enable the clock for I2C peripheral
+	I2C_PeriClockControl(pI2CHandle->pI2Cx, ENABLE);
+
 	// Configure the ACK control
 	pI2CHandle->pI2Cx->CR[0] |= (pI2CHandle->I2C_Config.I2C_ACKControl << I2C_CR1_ACK);
 
 	// Configure the frequency of the used clock
-	pI2CHandle->pI2Cx->CR[1] |= ( (RCC_GetPCLK1Value() / 1000000U) << I2C_CR2_FREQ);
+	uint32_t freq = RCC_GetPCLK1Value() / 1000000U;
+	pI2CHandle->pI2Cx->CR[1] |= ( freq << I2C_CR2_FREQ);
 
 	// Program the device own address
 	pI2CHandle->pI2Cx->OAR[0] |= (pI2CHandle->I2C_Config.I2C_DeviceAddress << I2C_OAR_ADD);
@@ -98,12 +118,12 @@ void I2C_Init(I2C_Handle_t *pI2CHandle){
 
 	// CCR calculation
 	uint16_t ccrValue = 0;
-	uint16_t fpclk = (uint16_t) RCC_GetPCLK1Value();
-	uint16_t fscl = (uint16_t) pI2CHandle->I2C_Config.I2C_SCLSpeed;
+	uint32_t fpclk = RCC_GetPCLK1Value();
+	uint32_t fscl = pI2CHandle->I2C_Config.I2C_SCLSpeed;
 	uint8_t dutyCycle = pI2CHandle->I2C_Config.I2C_FMDutyCycle;
 
 	if (fscl <= I2C_SCL_SPEED_SM){
-		ccrValue = fpclk / (2 * fscl);
+		ccrValue = (uint16_t) (fpclk / (2 * fscl));
 	}else {
 		pI2CHandle->pI2Cx->CCR |= (1 << I2C_CCR_FS);
 		pI2CHandle->pI2Cx->CCR |= (dutyCycle << I2C_CCR_DUTY);
@@ -113,8 +133,20 @@ void I2C_Init(I2C_Handle_t *pI2CHandle){
 			ccrValue = fpclk / (25 * fscl);
 		}
 	}
-
 	pI2CHandle->pI2Cx->CCR |= (ccrValue << I2C_CCR);
+
+	// Trise calculation
+	uint8_t trise = 0;
+	if (fscl <= I2C_SCL_SPEED_SM){
+		//trise = (uint8_t) ((1 / (1/freq)) + 1);
+		trise = (uint8_t) (freq + 1);
+	}else {
+		trise = (0.3 / (1/freq)) + 1;
+	}
+	pI2CHandle->pI2Cx->TRISE = (trise & 0x3F);
+
+
+
 }
 
 /*************************************************************************************
@@ -176,18 +208,138 @@ uint8_t I2C_GetFlagStatus(I2C_RegDef_t *pI2Cx, uint32_t FlagName){
  *
  */
 
-void I2C_MasterSendData(I2C_Handle_t *pI2CHandle, uint8_t *pTxbuffer, uint32_t len, uint8_t SlaveAddr){
+void I2C_MasterSendData(I2C_Handle_t *pI2CHandle, uint8_t *pTxbuffer, uint32_t Len, uint8_t SlaveAddr, uint8_t Sr){
 
 	// 1. Generate the Start condition
 	I2C_START_CONDITION(pI2CHandle->pI2Cx);
+	//I2C_GenerateStartCondition(pI2CHandle->pI2Cx);
 
 	// 2.Confirm that start generation is completed by checking the SB flag i the SR1
 	// 		Note: Until SB is cleared SCL will be stretched (pulled to LOW)
 	while( !I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_SB_FLAG) );
 
 	// 3. Send the address of the slave with the r/nw bit set to w(0) (total 8 bits)
-	I2C_ExecuteAddressPhase(pI2CHandle->pI2Cx, SlaveAddr);
+	I2C_ExecuteAddressPhase(pI2CHandle->pI2Cx, SlaveAddr, MASTER_WRITE);
+
+	// 4. Confirm that the address phase is completed by checking the ADDR flag in the SR1
+	while( !I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_ADDR_FLAG) );
+
+	// 5. Clear the ADDR flag according to its software sequence
+	//		Note: Until ADDR is cleared SCL will be stretched (pulled to LOW)
+	I2C_ClearADDRFlag(pI2CHandle->pI2Cx);
+
+	//6. Send data until lenght becomes 0
+	while(Len){
+		while( !I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_TxE_FLAG) );
+		pI2CHandle->pI2Cx->DR = *pTxbuffer;
+		pTxbuffer++;
+		Len--;
+	}
+
+	// 7. When Len becomes 0 wait for TxE=1 and BTF=1 before generating the STOP condition
+	//		Note: TxE=1 and BTF=1 means that both SR and DR are empty and next transmission should begin
+	//		when BTF=1 SCL will be stretched (pulled to LOW)
+	while( !I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_TxE_FLAG));
+	while( !I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_BTF_FLAG));
+
+	// 8. Generate the STOP condition and master need not to wait for completion of stop condition
+	// 		Note: Generating STOP, automatically clears the BTF
+	if (Sr == I2C_DISABLE_SR){
+		I2C_STOP_CONDITION(pI2CHandle->pI2Cx);
+	}
+
+
+
 }
+
+
+/*************************************************************************************
+ * @fn				- I2C_MasterReceiveData
+ *
+ * @brief			-
+ *
+ * @param[in]		-
+ * @param[in]		-
+ *
+ * @return 			- none
+ *
+ * @Note			-
+ *
+ */
+
+void I2C_MasterReceiveData(I2C_Handle_t *pI2CHandle, uint8_t *pTxbuffer, uint32_t Len, uint8_t SlaveAddr, uint8_t Sr){
+
+	// 1. Generate the START condition
+	I2C_START_CONDITION(pI2CHandle->pI2Cx);
+
+	// 2. Confirm that the start generation is completed by checking the SB flag in the SR1
+	//	Note: Until SB is cleared SCL will be stretched (pulled to LOW)
+	while( !I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_SB_FLAG) );
+
+	// 3. Send the address of the slave with the r/nw bit set to R(1) (total 8 bits)
+	I2C_ExecuteAddressPhase(pI2CHandle->pI2Cx, SlaveAddr, MASTER_READ);
+
+	// 4. Confirm that the address phase is completed by checking the ADDR flag in the SR1
+	while( !I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_ADDR_FLAG) );
+
+	// Sendig 1 byte of data
+	if (Len == 1){
+		// Disable the acking
+		I2C1_ACK_ENDI(DISABLE);
+
+		// 5. Clear the ADDR flag according to its software sequence
+		//		Note: Until ADDR is cleared SCL will be stretched (pulled to LOW)
+		I2C_ClearADDRFlag(pI2CHandle->pI2Cx);
+
+		// Wait unitl RXNE becomes 1
+		while( !I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_RxNE_FLAG));
+
+		// 8. Generate the STOP condition and master need not to wait for completion of stop condition
+		// 		Note: Generating STOP, automatically clears the BTF
+		if (Sr == I2C_DISABLE_SR){
+			I2C_STOP_CONDITION(pI2CHandle->pI2Cx);
+		}
+
+		// Read data into the buffer
+		*pTxbuffer = pI2CHandle->pI2Cx->DR;
+	}
+
+	// Sending more than 1 byte of data
+	if (Len > 1){
+		// 5. Clear the ADDR flag according to its software sequence
+		//		Note: Until ADDR is cleared SCL will be stretched (pulled to LOW)
+		I2C_ClearADDRFlag(pI2CHandle->pI2Cx);
+
+		// Read data until Len becomes zero
+		for (uint32_t i = Len; i > 0; i--){
+
+			// Wait unitl RXNE becomes 1
+			while( !I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_RxNE_FLAG));
+
+			if (i == 2){
+				// Disable the acking
+				I2C1_ACK_ENDI(DISABLE);
+
+				// 8. Generate the STOP condition and master need not to wait for completion of stop condition
+				// 		Note: Generating STOP, automatically clears the BTF
+				if (Sr == I2C_DISABLE_SR){
+					I2C_STOP_CONDITION(pI2CHandle->pI2Cx);
+				}
+			}
+
+			// Read the data
+			*pTxbuffer = pI2CHandle->pI2Cx->DR;
+			pTxbuffer++;
+		}
+	}
+
+	// Re-enable acking
+	if (pI2CHandle->I2C_Config.I2C_ACKControl == I2C_ACK_ENABLE){
+		I2C1_ACK_ENDI(ENABLE);
+	}
+
+}
+
 
 /*************************************************************************************
  * @fn				- I2C_IRQInterruptConfig

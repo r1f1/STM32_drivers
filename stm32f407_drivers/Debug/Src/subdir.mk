@@ -5,19 +5,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../Src/010i2c_master_tx.c \
 ../Src/syscalls.c \
-../Src/sysmem.c \
-../Src/test.c 
+../Src/sysmem.c 
 
 OBJS += \
+./Src/010i2c_master_tx.o \
 ./Src/syscalls.o \
-./Src/sysmem.o \
-./Src/test.o 
+./Src/sysmem.o 
 
 C_DEPS += \
+./Src/010i2c_master_tx.d \
 ./Src/syscalls.d \
-./Src/sysmem.d \
-./Src/test.d 
+./Src/sysmem.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -27,7 +27,7 @@ Src/%.o Src/%.su: ../Src/%.c Src/subdir.mk
 clean: clean-Src
 
 clean-Src:
-	-$(RM) ./Src/syscalls.d ./Src/syscalls.o ./Src/syscalls.su ./Src/sysmem.d ./Src/sysmem.o ./Src/sysmem.su ./Src/test.d ./Src/test.o ./Src/test.su
+	-$(RM) ./Src/010i2c_master_tx.d ./Src/010i2c_master_tx.o ./Src/010i2c_master_tx.su ./Src/syscalls.d ./Src/syscalls.o ./Src/syscalls.su ./Src/sysmem.d ./Src/sysmem.o ./Src/sysmem.su
 
 .PHONY: clean-Src
 

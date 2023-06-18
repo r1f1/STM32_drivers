@@ -1,0 +1,96 @@
+/*
+ * 010i2c_master_tx.c
+ *
+ *  Created on: Jun 13, 2023
+ *      Author: rafae
+ */
+
+
+/*
+ * GPIOs used as I2C pins:
+ * 	- PB6 --> SCL
+ * 	- PB9 --> SDA
+ * Alt function mode -- > 4
+ */
+
+#include "stm32f407xx.h"
+#include <string.h>
+#include <stdio.h>
+
+
+I2C_Handle_t I2C1Handle;
+
+#define MY_ADDR			0x61
+
+void delay(void){
+	for (uint32_t i = 0; i < 500000/2; i++);
+}
+
+void I2C1_GPIOInit(){
+
+	GPIO_Handle_t I2CPins;
+
+	I2CPins.pGPIOx = GPIOB;
+	I2CPins.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_ALTFN;
+	I2CPins.GPIO_PinConfig.GPIO_PinOPType = GPIO_OP_TYPE_OD;
+	I2CPins.GPIO_PinConfig.GPIO_PinAltFunMode = 4;
+	I2CPins.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_PU;
+	I2CPins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_HIGH;
+
+	// SCL pin
+	I2CPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_6;
+	GPIO_Init(&I2CPins);
+
+	// SDA pin
+	I2CPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_9;
+	GPIO_Init(&I2CPins);
+
+}
+
+void I2C1_Inits(){
+
+	I2C1Handle.pI2Cx = I2C1;
+	I2C1Handle.I2C_Config.I2C_ACKControl = I2C_ACK_ENABLE;
+	I2C1Handle.I2C_Config.I2C_DeviceAddress = MY_ADDR; // Not necessary in master mode
+	I2C1Handle.I2C_Config.I2C_SCLSpeed = I2C_SCL_SPEED_SM;
+	I2C1Handle.I2C_Config.I2C_FMDutyCycle = 0; // not used
+
+	I2C_Init(&pI2CHandle);
+
+}
+
+
+int main(){
+
+	// I2C pin inits
+	I2C1_GPIOInit();
+
+	// I2C configuration
+	I2C1_Inits();
+
+	return 0;
+}
+
+void I2C_ApplicationEventCallback(I2C_Handle_t *pI2CHandle, uint8_t AppEv){
+
+	static uint32_t i = 0;
+
+	if (AppEv == I2C_EVENT_RX_CMPLT){
+		RcvBuff[i++] = ReadByte; 			// "i" increase its value after this line is executed
+		if (ReadByte == '\0' || (i == MAX_LEN)){
+			rcvStop = 1;
+			RcvBuff[i-1] = '\0';
+			i = 0;
+		}
+	}
+}
+
+/* Runs when a data byte is received from the peripheral over I2C */
+void I2C1_IRQHandler(void){
+	I2C_IRQHandling(&I2C1Handle);
+}
+
+void EXTI9_5_IRQHandler(void){
+	GPIO_IRQHandling(GPIO_PIN_NO_6);
+	dataAvailable = 1;
+}

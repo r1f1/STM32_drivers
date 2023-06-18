@@ -16,8 +16,6 @@
 
 int main(void){
 
-
-
 	RCC->CFGR |= (0xA << 4);
 
 	printf("%ld\n", RCC_GetPCLK1Value());

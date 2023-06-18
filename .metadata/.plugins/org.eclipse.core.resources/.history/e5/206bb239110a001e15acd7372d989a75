@@ -1,0 +1,157 @@
+/*
+ * 010i2c_master_tx.c
+ *
+ *  Created on: Jun 13, 2023
+ *      Author: rafae
+ */
+
+
+/*
+ * GPIOs used as I2C pins:
+ * 	- PB6 --> SCL
+ * 	- PB9 --> SDA
+ * Alt function mode -- > 4
+ */
+
+#include "stm32f407xx.h"
+#include <string.h>
+#include <stdio.h>
+
+
+I2C_Handle_t I2C1Handle;
+
+#define MAX_LEN 			500
+
+char RcvBuff[MAX_LEN];
+
+__vo char ReadByte;
+
+__vo uint8_t rcvStop = 0;
+/* This flag will be set in the interrupt handler of the arduino interrupt GPIO */
+__vo uint8_t dataAvailable = 0;
+
+void delay(void){
+	for (uint32_t i = 0; i < 500000/2; i++);
+}
+
+void I2C1_GPIOInit(){
+
+	GPIO_Handle_t I2CPins;
+
+	I2CPins.pGPIOx = GPIOB;
+	I2CPins.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_ALTFN;
+	I2CPins.GPIO_PinConfig.GPIO_PinOPType = GPIO_OP_TYPE_PP;
+	I2CPins.GPIO_PinConfig.GPIO_PinAltFunMode = 4;
+	I2CPins.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_PU;
+	I2CPins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_HIGH;
+
+	// SCL pin
+	I2CPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_6;
+	GPIO_Init(&I2CPins);
+
+	// SDA pin
+	I2CPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_9;
+	GPIO_Init(&I2CPins);
+
+}
+
+void I2C1_Inits(){
+
+
+
+}
+
+void Slave_GPIO_InterruptPinInit(){
+
+	GPIO_Handle_t I2CHandle;
+	memset(&I2CHandle,0,sizeof(I2CHandle));
+
+	I2CHandle.pGPIOx = GPIOD;
+	I2CHandle.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_6;
+	I2CHandle.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_IT_FT;
+	I2CHandle.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_PU;
+	I2CHandle.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_LOW;
+
+	GPIO_Init(&I2CHandle);
+
+	GPIO_IRQPriorityConfig(IRQ_NO_EXTI9_5, NVIC_IRQ_PRI15);
+	GPIO_IRQInterruptConfig(IRQ_NO_EXTI9_5, ENABLE);
+}
+
+
+int main(){
+
+	uint8_t dummy_write = 0xFF; // for 16bit DFF we have to use 2 bytes 0xFFFF
+
+	/* Initialise pin working in an interrupt mode */
+	Slave_GPIO_InterruptPinInit();
+
+	/* Initialise GPIO pins to behave as I2C pin */
+	I2C1_GPIOInit();
+
+	/* Configure I2C1 pins */
+	I2C1_Inits();
+
+	/* Enable SSOE bit */
+	I2C1_SSOE_ENDI(ENABLE);
+
+	/* Configure I2C interrupt */
+	I2C_IRQInterruptConfig(IRQ_NO_I2C1, ENABLE);
+
+	while(1){
+
+		rcvStop = 0;
+
+		while(!dataAvailable); // wait until Master receive an Interrupt from Slave
+
+		GPIO_IRQInterruptConfig(IRQ_NO_EXTI9_5, DISABLE); // Disable further interrupts from Slave device
+
+		I2C1_CONTROL(ENABLE);
+
+		while(!rcvStop){
+
+			while ( I2C_SendDataIT(&I2C1Handle, &dummy_write, 1) == I2C_BUSY_IN_TX );
+			while ( I2C_ReceiveDataIT(&I2C1Handle, &ReadByte, 1) == I2C_BUSY_IN_RX );
+
+		}
+
+		/* Confirm that I2C is not busy and all the data is transferred */
+		while( I2C_GetFlagStatus(I2C1, I2C_BSY_FLAG) );
+
+		/* Disable I2C1 peripheral */
+		I2C1_CONTROL(DISABLE);
+
+		printf("Rcvd data = %s\n", RcvBuff);
+
+		dataAvailable = 0;
+
+		GPIO_IRQInterruptConfig(IRQ_NO_EXTI9_5, ENABLE);
+
+	}
+
+	return 0;
+}
+
+void I2C_ApplicationEventCallback(I2C_Handle_t *pI2CHandle, uint8_t AppEv){
+
+	static uint32_t i = 0;
+
+	if (AppEv == I2C_EVENT_RX_CMPLT){
+		RcvBuff[i++] = ReadByte; 			// "i" increase its value after this line is executed
+		if (ReadByte == '\0' || (i == MAX_LEN)){
+			rcvStop = 1;
+			RcvBuff[i-1] = '\0';
+			i = 0;
+		}
+	}
+}
+
+/* Runs when a data byte is received from the peripheral over I2C */
+void I2C1_IRQHandler(void){
+	I2C_IRQHandling(&I2C1Handle);
+}
+
+void EXTI9_5_IRQHandler(void){
+	GPIO_IRQHandling(GPIO_PIN_NO_6);
+	dataAvailable = 1;
+}

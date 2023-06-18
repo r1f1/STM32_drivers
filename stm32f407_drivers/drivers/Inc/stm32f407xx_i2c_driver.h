@@ -64,11 +64,24 @@ typedef struct{
 #define I2C3_CONTROL(x)					do{ (x) ? (I2C3->CR[0] |= (1 << I2C_CR1_PE)) : (I2C3->CR[0] &= ~(1 << I2C_CR1_PE)); }while(0)
 
 /*
- * Generate the start condition
+ * Generate the START condition
  */
 
-#define I2C_START_CONDITION(x)				( x->CR[0] |= (1 << I2C_CR1_START))
+#define I2C_START_CONDITION(x)					( x->CR[0] |= (1 << I2C_CR1_START) )
 
+/*
+ * Generate the STOP condition
+ */
+
+#define I2C_STOP_CONDITION(x)					(x->CR[0] |= (1 << I2C_CR1_STOP))
+
+/*
+ * Enable or disable acking
+ */
+
+#define I2C1_ACK_ENDI(x)							do{ (x) ? (I2C1->CR[0] |= (1 << I2C_CR1_ACK)) : (I2C1->CR[0] &= ~(1 << I2C_CR1_ACK)); }while(0)
+#define I2C2_ACK_ENDI(x)							do{ (x) ? (I2C2->CR[0] |= (1 << I2C_CR1_ACK)) : (I2C2->CR[0] &= ~(1 << I2C_CR1_ACK)); }while(0)
+#define I2C3_ACK_ENDI(x)							do{ (x) ? (I2C3->CR[0] |= (1 << I2C_CR1_ACK)) : (I2C3->CR[0] &= ~(1 << I2C_CR1_ACK)); }while(0)
 
 /*
  * I2C related status flags definition
@@ -99,7 +112,15 @@ typedef struct{
 #define I2C_PEC_FLAG			(1 << I2C_PEC_BERR)
 
 
+/*
+ * I2C generic macros
+ */
 
+#define MASTER_WRITE			0
+#define MASTER_READ				1
+
+#define I2C_DISABLE_SR				0
+#define I2C_ENABLE_SR					1
 
 /************************************************************************************************
  * 									APIs supported by this driver
@@ -123,7 +144,9 @@ void I2C_DeInit(I2C_RegDef_t *pI2Cx);
  * Data send and receive
  */
 
-void I2C_MasterSendData(I2C_Handle_t *pI2CHandle, uint8_t *pTxbuffer, uint32_t len, uint8_t SlaveAddr);
+void I2C_MasterSendData(I2C_Handle_t *pI2CHandle, uint8_t *pTxbuffer, uint32_t len, uint8_t SlaveAddr, uint8_t Sr);
+void I2C_MasterReceiveData(I2C_Handle_t *pI2CHandle, uint8_t *pTxbuffer, uint32_t len, uint8_t SlaveAddr, uint8_t Sr);
+
 
 /*
  * Get which clock is enable

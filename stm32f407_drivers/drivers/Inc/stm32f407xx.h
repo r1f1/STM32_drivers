@@ -570,7 +570,7 @@ typedef struct{
 #define I2C_CCR_DUTY			14
 #define I2C_CCR_FS				15
 
-
+#define I2C_TRISE				0
 
 
 #include "stm32f407_gpio_driver.h"
