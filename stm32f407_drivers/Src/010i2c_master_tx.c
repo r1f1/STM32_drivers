@@ -98,7 +98,7 @@ int main(){
 		delay();
 
 		// Send the data
-		I2C_MasterSendData(&I2C1Handle, data, strlen((char*)data), SLAVE_ADDR, I2C_DISABLE_SR);
+		I2C_MasterSendData(&I2C1Handle, data, strlen((char*)data), SLAVE_ADDR, I2C_  DISABLE_SR);
 	}
 
 

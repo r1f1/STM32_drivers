@@ -1,4 +1,4 @@
-Src/011i2c_master_rx_testing.o: ../Src/011i2c_master_rx_testing.c \
+Src/013i2c_slave_tx_string.o: ../Src/013i2c_slave_tx_string.c \
  C:/Users/rafae/Documents/Embedded-C/MCU1-Course/MCU1/tutor_drivers/drivers/inc/stm32f407xx.h \
  C:/Users/rafae/Documents/Embedded-C/MCU1-Course/MCU1/tutor_drivers/drivers/inc/stm32f407xx_gpio_driver.h \
  C:/Users/rafae/Documents/Embedded-C/MCU1-Course/MCU1/tutor_drivers/drivers/inc/stm32f407xx.h \

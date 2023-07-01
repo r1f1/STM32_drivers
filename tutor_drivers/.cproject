@@ -77,13 +77,13 @@
 							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec.1855046727" name="MCU Output Converter Motorola S-rec with symbols" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec"/>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.145160031.1598200748" name="011i2c_master_rx_testing.c" rcbsApplicability="disable" resourcePath="Src/011i2c_master_rx_testing.c" toolsToInvoke="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1819053653.1381856732">
-						<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1819053653.1381856732" name="MCU GCC Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1819053653"/>
+					<fileInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.145160031.1506012985" name="013i2c_slave_tx_string.c" rcbsApplicability="disable" resourcePath="Src/013i2c_slave_tx_string.c" toolsToInvoke="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1819053653.1965551916">
+						<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1819053653.1965551916" name="MCU GCC Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1819053653"/>
 					</fileInfo>
 					<fileInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.145160031.1518485595" name="readme" rcbsApplicability="disable" resourcePath="Src/readme" toolsToInvoke=""/>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Inc"/>
-						<entry excluding="010i2c_master_tx_testing.c|009spi_message_rcv_it.c|003led_button_ext.c|004ButtonInterrupt.c|readme|004gpio_freq.c|014i2c_slave_tx_string2.c|016uart_case.c|013i2c_slave_tx_string.c|007spi_txonly_arduino.c|017rtc_lcd.c|012i2c_master_rx_testingIT.c|015uart_tx.c|008spi_cmd_handling.c|002led_button.c|001led_toggle.c|tutor_006spi_tx_testing.c|005button_interrupt.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
+						<entry excluding="012i2c_master_rx_testingIT.c|011i2c_master_rx_testing.c|010i2c_master_tx_testing.c|009spi_message_rcv_it.c|003led_button_ext.c|004ButtonInterrupt.c|readme|004gpio_freq.c|014i2c_slave_tx_string2.c|016uart_case.c|007spi_txonly_arduino.c|017rtc_lcd.c|015uart_tx.c|008spi_cmd_handling.c|002led_button.c|001led_toggle.c|tutor_006spi_tx_testing.c|005button_interrupt.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Startup"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="drivers"/>
 					</sourceEntries>

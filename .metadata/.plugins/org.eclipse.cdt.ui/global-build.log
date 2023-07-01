@@ -1,21 +1,21 @@
-20:44:01 **** Incremental Build of configuration Debug for project stm32f407_drivers ****
+10:37:53 **** Incremental Build of configuration Debug for project stm32f407_drivers ****
 make -j4 all 
-arm-none-eabi-gcc "../Src/010i2c_master_tx.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32 -DSTM32F407G_DISC1 -DSTM32F4 -DSTM32F407VGTx -c -I../Inc -I"C:/Users/rafae/Documents/Embedded-C/MCU1-Course/MCU1/stm32f407_drivers/drivers/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Src/010i2c_master_tx.d" -MT"Src/010i2c_master_tx.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/010i2c_master_tx.o"
+arm-none-eabi-gcc "../Src/013i2c_slave_tx_string.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32 -DSTM32F407G_DISC1 -DSTM32F4 -DSTM32F407VGTx -c -I../Inc -I"C:/Users/rafae/Documents/Embedded-C/MCU1-Course/MCU1/stm32f407_drivers/drivers/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Src/013i2c_slave_tx_string.d" -MT"Src/013i2c_slave_tx_string.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/013i2c_slave_tx_string.o"
 arm-none-eabi-gcc -o "stm32f407_drivers.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\rafae\Documents\Embedded-C\MCU1-Course\MCU1\stm32f407_drivers\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="stm32f407_drivers.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: stm32f407_drivers.elf
  
 arm-none-eabi-size   stm32f407_drivers.elf 
 arm-none-eabi-objdump -h -S  stm32f407_drivers.elf  > "stm32f407_drivers.list"
    text	   data	    bss	    dec	    hex	filename
-   5648	     32	   1576	   7256	   1c58	stm32f407_drivers.elf
+   7120	     40	   1608	   8768	   2240	stm32f407_drivers.elf
 Finished building: default.size.stdout
  
 Finished building: stm32f407_drivers.list
  
-20:44:09 **** Incremental Build of configuration Debug for project stm32f407_drivers ****
+10:38:02 **** Incremental Build of configuration Debug for project stm32f407_drivers ****
 make -j4 all 
 arm-none-eabi-size   stm32f407_drivers.elf 
    text	   data	    bss	    dec	    hex	filename
-   5648	     32	   1576	   7256	   1c58	stm32f407_drivers.elf
+   7120	     40	   1608	   8768	   2240	stm32f407_drivers.elf
 Finished building: default.size.stdout
  
